@@ -1490,7 +1490,7 @@ xx <- gsub('\nrow40 &  &  &  &  &  &  & \\\\',
            row40, xx, fixed = TRUE)
 
 # ns for each subgroup
-ns <- gsub('^[[:alpha:] : /]*', '', models$Combined$tidy$term)
+ns <- gsub('^[[:alpha:] : /]*', '', models$`Sharing\nDiscernment`$tidy$term)
 
 for(i in 1:length(ns)){
   xx <- sub('\\\\\n & (', 
@@ -2120,7 +2120,7 @@ baltest_out_KY %>%
       format = "latex",
       booktabs = TRUE,
       toprule = NULL, 
-      bottomrule = paste('N', prettyNum(nvals[nvals[,'country']=='Kenya','n', drop =TRUE][2], big.mark = ','),
+      bottomrule = paste('n', prettyNum(nvals[nvals[,'country']=='Kenya','n', drop =TRUE][2], big.mark = ','),
                          ' ',
                          prettyNum(nvals[nvals[,'country']=='Kenya','n', drop =TRUE][3], big.mark = ','),
                          ' ',
@@ -2930,14 +2930,14 @@ xx <- gsub('\n\\bottomrule', '\\hline
 \\hspace{1em} Imputing pre-test response & $-$ & $-$ &  $-$ &  $-$ &  $-$ &  $-$ & Yes &  $-$  \\\\\n
 {\\textbf{Weights}} \\rule{0pt}{1.2\\normalbaselineskip}\\\\\n
 \\hspace{1em} Treatment assignment probability &Yes &Yes  & Yes & Yes & Yes & Yes & Yes & Yes \\\\\n
-\\hspace{1em} Learning stage covariate distribution & $-$ & $-$ &  $-$ &  $-$ & Yes &  $-$ &  $-$ &  $-$ \\\\\n
+\\hspace{1em} Learning stage covariate distribution & $-$ & $-$ &  $-$ &  $-$ & $-$ &  $-$ &  $-$ &  Yes \\\\\n
 \\hspace{1em} Censoring &Yes &Yes &  $-$ &  $-$ &  $-$ &  $-$ &  $-$ &  $-$ 
 \\\\\n
 {\\textbf{Estimator}} \\rule{0pt}{1.2\\normalbaselineskip}\\\\\n
-\\hspace{1em} AIPW Scores & Yes & Yes &  $-$ &  $-$ &  $-$ & Yes & Yes & Yes\\\\\n
+\\hspace{1em} (A)IPW Scores & Yes & Yes &  $-$ &  $-$ &  $-$ & Yes & Yes & Yes\\\\\n
 \\hspace{1em} Robust OLS &  $-$ &  $-$ & Yes &  $-$ &  $-$ &  $-$ & $-$ &  $-$ \\\\\n
 \\hspace{1em} Lin Estimator &  $-$ &  $-$ &  $-$ & Yes & Yes &  $-$ & $-$ &  $-$ \\\\\n
-{\\textbf{N}} & 10,531 & 10,531 & 10,531 & 10,531 & 10,531 & 10,531 &11,534  & 10,531 
+{\\textbf{n}} & 10,531 & 10,531 & 10,531 & 10,531 & 10,531 & 10,531 &11,534  & 10,531 
 \\rule{0pt}{1.2\\normalbaselineskip}\\\\\n', xx[1], fixed = TRUE)
 
 xx <- gsub('\nrow2 &  &  &  &  &  &  &  & \\\\', 
@@ -3644,7 +3644,7 @@ xx <- gsub('\nrow40 &  &  &  &  &  &  & \\\\',
            row40, xx, fixed = TRUE)
 
 # ns for each subgroup
-ns <- gsub('^[[:alpha:] : /]*', '', models$Combined$tidy$term)
+ns <- gsub('^[[:alpha:] : /]*', '', models$`Sharing\nDiscernment`$tidy$term)
 
 for(i in 1:length(ns)){
   xx <- sub('\\\\\n & (', 
@@ -4032,7 +4032,7 @@ xx <- gsub('\nrow40 &  &  &  &  &  &  & \\\\',
            row40, xx, fixed = TRUE)
 
 # ns for each subgroup
-ns <- gsub('^[[:alpha:] : /]*', '', models$Combined$tidy$term)
+ns <- gsub('^[[:alpha:] : /]*', '', models$`Sharing\nDiscernment`$tidy$term)
 
 for(i in 1:length(ns)){
   xx <- sub('\\\\\n & (', 
@@ -4418,7 +4418,7 @@ xx <- gsub('\nrow40 &  &  &  &  &  &  & \\\\',
            row40, xx, fixed = TRUE)
 
 # ns for each subgroup
-ns <- gsub('^[[:alpha:] : /]*', '', models$Combined$tidy$term)
+ns <- gsub('^[[:alpha:] : /]*', '', models$`Sharing\nDiscernment`$tidy$term)
 
 for(i in 1:length(ns)){
   xx <- sub('\\\\\n & (', 
