@@ -61,11 +61,11 @@ update_thompson <- function(
       model$X[[w]] <- rbind(model$X[[w]], cbind(xs[ws == w,,drop = FALSE]))
       model$y[[w]] <- rbind(model$y[[w]], cbind(yobs[ws == w, drop = FALSE]))
       model$ps[[w]] <- c(model$ps[[w]], ps[cbind(ws == w,w)])
+      regr <- cv.glmnet(model$X[[w]], model$y[[w]], alpha = 0) 
+      coef <- coef(regr, s = 'lambda.1se')
       
       if(balanced == 'ipw'){
         W <- 1/model$ps[[w]] # balancing weights
-        regr <- cv.glmnet(model$X[[w]], model$y[[w]], alpha = 0, weights = W) 
-      
         X <- model$X[[w]]
         Y <- model$y[[w]]
         n <- length(Y)
@@ -95,8 +95,6 @@ update_thompson <- function(
       } else if (balanced == 'stabilized') {
         ps_hj <- model$ps[[w]]/sum(model$ps[[w]])
         W <- 1/ps_hj # balancing weights
-        regr <- cv.glmnet(model$X[[w]], model$y[[w]], alpha = 0, weights = W) 
-
         X <- model$X[[w]]
         Y <- model$y[[w]]
         n <- length(Y)
@@ -124,8 +122,6 @@ update_thompson <- function(
         
         model$V[w,,] <- array(mean((model$y[[w]] - yhat)^2* W) * solve(B))
       } else{
-        regr <- cv.glmnet(model$X[[w]], model$y[[w]], alpha = 0) 
-        coef <- coef(regr, s = 'lambda.1se')
         X <- cbind(1, model$X[[w]])
         yhat <- predict(regr, s = 'lambda.1se', model$X[[w]])
         model$mu[w,] <- coef[, drop = TRUE] # intercept and coefficients of predictors
@@ -377,11 +373,11 @@ prop.table(table(apply(muXXs, 1, which.max)))
 # Set parameters
 floor_start <- 5
 floor_decay <- 0.9
-batch_sizes <- c(200, 200, 200, 200, 200)
+batch_sizes <- c(600, 100, 100, 100, 100)
 
 A <- 1e3 # experiment size
 K <- ncol(muXXs) # number of arms
-niter <- 1e1 # number of iterations
+niter <- 1e3 # number of iterations
 
 # Run contextual experiment
 
@@ -399,7 +395,7 @@ for(i in 1:niter){
   shuffle <- sample(1:nrow(xmat), A, replace = TRUE)
   xs <- xmat[shuffle,]
   muxs <- muXXs[shuffle,]
-  ys <- muxs + matrix(runif(A*K, -0.3, 0.3), nrow = A, ncol = K)
+  ys <- muxs + matrix(runif(A*K, -3, 3), nrow = A, ncol = K)
   
   # uniform assignment experiment
   ws_uniform <- c(rep(1:K, A %/% K), sample(1:K, A %% K))
@@ -411,8 +407,9 @@ for(i in 1:niter){
   cf.priority <- multi_arm_causal_forest(
     X = xs,
     Y = ys[cbind(1:A, ws_uniform)],
-    W = as.factor(ws_uniform),
-    W.hat = matrix(1/K, nrow = A, ncol = K))
+    W = as.factor(ws_uniform)#,
+    # W.hat = matrix(1/K, nrow = A, ncol = K)
+    )
   
   ws_opt <- apply(predict(cf.priority, xmat)$predictions, 1, which.max)
   out_l[[1]][i,2] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
@@ -449,8 +446,9 @@ for(i in 1:niter){
   cf.priority <- multi_arm_causal_forest(
     X = xs,
     Y = results$yobs,
-    W = as.factor(results$ws),
-    W.hat = probs_r)
+    W = as.factor(results$ws)#,
+    # W.hat = probs_r
+    )
   
   ws_opt <- apply(predict(cf.priority, xmat)$predictions, 1, which.max)
   out_l[[2]][i,2] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
@@ -488,8 +486,9 @@ for(i in 1:niter){
   cf.priority <- multi_arm_causal_forest(
     X = xs,
     Y = results$yobs,
-    W = as.factor(results$ws),
-    W.hat = probs_r)
+    W = as.factor(results$ws)#,
+    # W.hat = probs_r
+    )
   
   ws_opt <- apply(predict(cf.priority, xmat)$predictions, 1, which.max)
   out_l[[3]][i,2] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
@@ -526,8 +525,9 @@ for(i in 1:niter){
   cf.priority <- multi_arm_causal_forest(
     X = xs,
     Y = results$yobs,
-    W = as.factor(results$ws),
-    W.hat = probs_r)
+    W = as.factor(results$ws)#,
+    # W.hat = probs_r
+    )
   
   ws_opt <- apply(predict(cf.priority, xmat)$predictions, 1, which.max)
   out_l[[4]][i,2] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
@@ -538,7 +538,8 @@ for(i in 1:niter){
     X = xs[ (A-batch_sizes[length(batch_sizes)]):A ,],
     Y = results$yobs[ (A-batch_sizes[length(batch_sizes)]):A ],
     W = as.factor(results$ws)[ (A-batch_sizes[length(batch_sizes)]):A ],
-    W.hat = probs_r[ (A-batch_sizes[length(batch_sizes)]):A ,])
+    W.hat = probs_r[ (A-batch_sizes[length(batch_sizes)]):A ,]
+    )
   
   ws_opt <- apply(predict(cf.priority, xmat)$predictions, 1, which.max)
   out_l[[4]][i,3] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
@@ -558,7 +559,7 @@ result_l <- lapply(out_l, function(x) c(colMeans(x, na.rm = TRUE), policy_SE = s
 results_mat <- do.call(rbind, result_l)[,c(1,2,6,3,4,5)]
 rownames(results_mat) <- c('uniform', 'LinTS', 'BLTS', 'hjBLTS')
 
-# write.csv(results_mat, '../data/policy_value_simulations.csv')
+write.csv(results_mat, '../data/policy_value_simulations.csv')
 
 ```
 
