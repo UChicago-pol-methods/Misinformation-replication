@@ -366,7 +366,7 @@ for(i in 1:niter){
   muxs <- muXXs[shuffle,]
   ys <- muxs + matrix(runif(A*K, -0.1, 0.1), nrow = A, ncol = K)
   
-  #### Uniform assignment ####
+  # Uniform assignment ----
   ws_uniform <- c(rep(1:K, A %/% K), sample(1:K, A %% K))
   
   # on-policy assignment
@@ -403,7 +403,7 @@ for(i in 1:niter){
   out_l[[1]][i,5] <- mean(1/(1/K))
   
   
-  #### Linear TS, no floor ####
+  #### Linear TS, no floor 
   results <- run_experiment(ys, 0, floor_decay, batch_sizes, xs, balanced = 'none')
   
   # on-policy assignment
@@ -445,49 +445,8 @@ for(i in 1:niter){
   # mean inverse probability for on-assignment
   out_l[[2]][i,5] <- mean(1/probs_r[cbind(1:A, apply(muxs, 1, which.max))])
   
-  # linear balanced TS
-  results <- run_experiment(ys, floor_start, floor_decay, batch_sizes, xs, balanced = 'ipw')
   
-  # on-policy assignment
-  out_l[[3]][i,1] <- mean(apply(muxs, 1, which.max) == results$ws)
-  
-  # policy value
-  probs_r <- t(sapply(1:A, function(x){
-    results$probs[x,x,]
-  }))
-  
-  cf.priority <- multi_arm_causal_forest(
-    X = xs,
-    Y = results$yobs,
-    W = as.factor(results$ws)#,
-    # W.hat = probs_r
-  )
-  
-  preds <- predict(cf.priority, xmat)$predictions[,,1]
-  ws_opt <- apply(preds, 1, function(x) which.max(c(0, x)))
-  out_l[[3]][i,2] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
-  
-  # policy value last batch
-  
-  cf.priority <- multi_arm_causal_forest(
-    X = xs[ (A-batch_sizes[length(batch_sizes)]):A ,],
-    Y = results$yobs[ (A-batch_sizes[length(batch_sizes)]):A ],
-    W = as.factor(results$ws)[ (A-batch_sizes[length(batch_sizes)]):A ],
-    W.hat = probs_r[ (A-batch_sizes[length(batch_sizes)]):A ,])
-  
-  preds <- predict(cf.priority, xmat)$predictions[,,1]
-  ws_opt <- apply(preds, 1, function(x) which.max(c(0, x)))
-  out_l[[3]][i,3] <- mean(muXXs[cbind(1:length(ws_opt), ws_opt)])
-  
-  # regret
-  out_l[[3]][i,4] <- mean(muxs[cbind(1:length(results$ws), apply(muxs, 1, which.max))] - 
-                            muxs[cbind(1:length(results$ws), results$ws)])
-  
-  # mean inverse probability for on-assignment
-  out_l[[3]][i,5] <- mean(1/probs_r[cbind(1:A, apply(muxs, 1, which.max))])
-  
-  
-  #### Linear TS, no floor ####
+  # Linear TS, no floor ----
   results <- run_experiment(ys, 0, floor_decay, batch_sizes, xs, balanced = 'none')
   
   # on-policy assignment
@@ -527,7 +486,9 @@ for(i in 1:niter){
   # mean inverse probability for on-assignment
   out_l[[2]][i,5] <- mean(1/probs_r[cbind(1:A, apply(muxs, 1, which.max))])
   
-  #### Linear TS, floor ####
+  
+  
+  # Linear TS, floor ----
   results <- run_experiment(ys, floor_start, floor_decay, batch_sizes, xs, balanced = 'none')
   
   # on-policy assignment
@@ -566,7 +527,7 @@ for(i in 1:niter){
   # mean inverse probability for on-assignment
   out_l[[3]][i,5] <- mean(1/probs_r[cbind(1:A, apply(muxs, 1, which.max))])
   
-  #### Linear balanced TS, floor ####
+  # Linear balanced TS, floor ----
   results <- run_experiment(ys, floor_start, floor_decay, batch_sizes, xs, balanced = 'ipw')
   
   # on-policy assignment
