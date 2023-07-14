@@ -984,7 +984,7 @@ gg1 <- ggplot(df_grid[which(df_grid$level == 'Interactions: Respondent x headlin
   geom_point(position=position_dodge(width=0.5), 
              size = 1, fill = 'white') + # change size, fill here
   geom_errorbar(aes(xmin = estimate - 1.96*std.error, xmax = estimate + 1.96*std.error), 
-                width = 0.05, position=position_dodge(width=0.5)) + 
+                width = 0, position=position_dodge(width=0.5)) + 
   theme_bw() +   
   xlab('Estimate') +
   ylab('Policy') +
@@ -1018,7 +1018,7 @@ gg2 <- ggplot(df_grid[which(df_grid$level != 'Interactions: Respondent x headlin
     .width = 0, size = 0) + 
   geom_point(size = 1, fill = 'white') + # change size, fill here
   geom_errorbar(aes(xmin = estimate - 1.96*std.error, xmax = estimate + 1.96*std.error), 
-                width = 0.05, position=position_dodge(width=0.5)) + 
+                width = 0, position=position_dodge(width=0.5)) + 
   theme_bw() +   
   xlab('Estimate') +
   ylab(NULL) +
@@ -1073,7 +1073,7 @@ gg2_alt <- ggplot(df_grid_alt,
     .width = 0, size = 0) + 
   geom_point(size = 1, fill = 'white') + # change size, fill here
   geom_errorbar(aes(xmin = estimate - 1.96*std.error, xmax = estimate + 1.96*std.error), 
-                width = 0.05, position=position_dodge(width=0.5)) + 
+                width = 0, position=position_dodge(width=0.5)) + 
   theme_bw() +   
   xlab('Estimate') +
   ylab(NULL) +
@@ -1098,11 +1098,11 @@ gg2_alt <- ggplot(df_grid_alt,
   coord_cartesian(xlim = c(-1.5, 1.4))
 
 
-gt <- cowplot::plot_grid(
-  cowplot::plot_grid(
+gt <- plot_grid(
+  plot_grid(
     gg1 + theme(legend.position="none"), 
     gg2_alt), 
-  cowplot::plot_grid(get_legend(gg1), NULL, nrow = 1, rel_widths = c(2.4,1)),
+  plot_grid(get_legend(gg1), NULL, nrow = 1, rel_widths = c(2.4,1)),
   nrow = 2, rel_heights = c(10,1)
 )
 
@@ -1552,12 +1552,12 @@ ggplot(all_scores, aes(x = estimate, y =term, color=`Response measure`,
     .width = 0, size = 0, height = 0.2)  +
   geom_point(data = all_scores %>% filter(Channel != 'Any'),
              position=position_dodge(width=0.5), 
-             size = 4, fill = 'white') + # change size, fill here
+             size = 2, fill = 'white') + # change size, fill here
   geom_point(data = all_scores %>% filter(Channel == 'Any'), 
-             size = 4, fill = 'white') + # change size, fill here
+             size = 2, fill = 'white') + # change size, fill here
   geom_errorbar(data = all_scores %>% filter(Channel != 'Any'),
                 aes(xmin = estimate - 1.96*std.error, xmax = estimate + 1.96*std.error), 
-                width = 0.05, position=position_dodge(width=0.5)) + 
+                width = 0, position=position_dodge(width=0.5)) + 
   geom_errorbar(data = all_scores %>% filter(Channel == 'Any'),
                 aes(xmin = estimate - 1.96*std.error, xmax = estimate + 1.96*std.error), 
                 width = 0) + 
@@ -2487,7 +2487,7 @@ balwts_treat_uncens_restricted[which(balwts_treat_uncens_restricted>quantile(bal
 
 # with no pre-test
 if(file.exists('objects/aipw_scores_nopretest.RDS')){ # read in scores if already generated
-  aipw_scores_nopretest.RDS <- readRDS('objects/aipw_scores_nopretest.RDS')
+  aipw_scores_nopretest <- readRDS('objects/aipw_scores_nopretest.RDS')
   
 }else{
   aipw_scores_nopretest <- aw_scores_eval(xs = xs_eval[,-which(grepl('strat', colnames(xs_eval)))],
@@ -2528,7 +2528,7 @@ if(file.exists('objects/aipw_scores_restricted_nopretest.RDS')){ # read in score
 
 # with no covariates
 if(file.exists('objects/aipw_scores_nocovariates.RDS')){ # read in scores if already generated
-  aipw_scores_nocovariates.RDS <- readRDS('objects/aipw_scores_nocovariates.RDS')
+  aipw_scores_nocovariates <- readRDS('objects/aipw_scores_nocovariates.RDS')
 
 }else{
   aipw_scores_nocovariates <- aw_scores(yobs = yobs_eval,
