@@ -1,0 +1,43 @@
+\begin{table}[H]
+\caption{\textbf{Covariates and response options}}
+\refstepcounter{SItable}\label{tab:cov_long}
+\begin{adjustbox}{totalheight=.9\textheight-2\baselineskip, max width = \textwidth}
+\begin{tabular}{p{0.3\linewidth}p{0.7\linewidth}p{0.25\linewidth}}
+\textbf{Covariate}                   & \textbf{Response options} & \textbf{Coded as}                                     \\
+\hline
+Gender                                      & Male,   Female, Nonbinary, Other                           & 1 if male, 0 otherwise  \\
+Age                                         & Integers                                                   & Continuous, {flag if greater than 120}              \\
+Education &
+  No   formal schooling, Informal schooling only, Some primary school, Primary   school completed, Some secondary school, Secondary school completed,   Post-secondary qualifications, Some university, University completed,   Post-graduate &
+  1:10, flag if missing \\
+Geography                                   & Urban, Rural                                 & 1 if urban, 0 otherwise \\
+Religion                                    & Christian, Muslim, Other/None                           & Indicators              \\
+Denomination (Christian)  & Pentecostal, Other  & Indicator (coded 1 if Pentecostal, 0 otherwise)\\
+Religiosity   (freq. of attendance) &
+  Never,   Less than once a month, One to three times per month, Once a week, More than   once a week but less than daily, Daily &
+  1:6, flag if missing \\
+%    Belief in God's control & 1. God will grant wealth and good health to all believers who have enough faith, 2. God doesn't always give wealth and good health even to believers who have deep faith & Indicator (coded 1 if answer is 1, 0 otherwise)\\
+ Locus of control & 
+% Some people feel they have completely free choice and control over their lives, while other people feel that what they do has no real effect on what happens to them. Please enter a number between 1 and 10, where 1 means "no choice at all" and 10 means "a great deal of choice" to indicate how much freedom of choice and control you feel you have over the way your life turns out 
+[See survey instrument for full list] & 1:10, flag if missing\\
+Index   of scientific views                 & [See   survey instrument for full questions and response options] & 0:2, flag if missing                     \\
+Digital Literacy Index &  {[}Based on the first nine items of \cite{guessetal2020digital}'s  proposed measure, see  survey instrument for full questions and response options{]}& 0:24\\
+Frequency of social media usage (x2)& {[}See   survey instrument for full questions and response options{]} & 0:3, flag if missing \\
+Cognitive Reflection Test& {[}See   survey instrument for full questions and response options{]}& 0:3 (1 point for each correct response)\\
+Index of household possessions%:   radio, tv, motorvehicle/motorcycle, computer/laptop, bank account, mobile   phone, bicycle 
+&
+  I/my household owns, Do not own [See survey instrument for items] &
+  Continuous, sum of owned items, flag if all missing \\
+Job   with cash income                      & Yes,   No                                                  & 1 if yes                \\
+Number   of people in household             & Integers                                                   & Continuous, flag if missing              \\
+Political affiliation & Governing party v. opposition & Indicator (coded 1 if associate with or voted for candidate from governing party, 0 otherwise)\\
+Concern regarding COVID-19                  & Not at all worried, Somewhat worried,  Very   worried      & 1:3, flag if missing                     \\
+%COVID-19 information & [Three True/False questions, see survey instrument for full questions] & 0:3 (1 point for each correct response)\\
+Perceived government efficacy   on COVID-19 & Very   poorly, Somewhat poorly, Somewhat well, Very well   & 1:4, flag if missing \\
+%Sources and frequency of news/media consumption &Never, Less than once a month, A few times a month, A few times a week, Once a day, Multiple times a day \ \  [See survey instrument for sources]  &  0:5 for \textit{each} of top three sources
+{Strata of response to pre-test stimuli} & [Would share stimuli on timeline/via Messenger]& Indicators for strata (0:2) x (True + False = 2 types) $\times$ (timeline + Messenger = 2 channels) 
+\end{tabular} 
+\end{adjustbox}
+\footnotesize
+\textit{Note:} Regarding missingness flags, respondents must respond to chatbot questions to advance in the survey, but for contexts they may enter ``skip'' if they do not wish to answer a given question, with the exception of age, which we check is greater than 18. 
+\end{table}
